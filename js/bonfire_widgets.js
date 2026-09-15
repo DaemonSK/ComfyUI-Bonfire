@@ -434,6 +434,15 @@ export function resetStaleCombos(node, names) {
  */
 export function observeWidgetValue(widget, onChange) {
   const original = Object.getOwnPropertyDescriptor(widget, "value");
+  // DOM-only widgets and some third-party widgets expose an immutable value
+  // descriptor. They are not configuration sources, and attempting to wrap one
+  // breaks connection refresh for every usable widget that follows it.
+  if (
+    (original && original.configurable === false) ||
+    (!original && !Object.isExtensible(widget))
+  ) {
+    return () => {};
+  }
   let stored = widget.value;
 
   const read = original?.get ? () => original.get.call(widget) : () => stored;
