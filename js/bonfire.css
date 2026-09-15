@@ -1,0 +1,711 @@
+/* Bonfire interface styles.
+ *
+ * Colours come from ComfyUI's own custom properties where they exist, with a fallback,
+ * so the nodes follow the user's theme instead of pinning one.
+ */
+
+.bonfire-loader,
+.bonfire-shot {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 2px;
+  font-size: 11px;
+  color: var(--descrip-text, #b7b7b7);
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+/* Some theme rules assign display directly to rows. Hidden must always win or an old
+   mode's controls remain visible underneath the current mode. */
+.bonfire-loader [hidden],
+.bonfire-shot [hidden] {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------- loader stage */
+
+.bonfire-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  overflow: hidden;
+  /* Checkerboard, so a transparent image reads as transparent rather than as black. */
+  background-color: var(--comfy-input-bg, #222);
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.06) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.06) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+.bonfire-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.bonfire-stage-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #ddd;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.bonfire-loader.is-dropping .bonfire-stage {
+  outline: 2px dashed var(--border-color, #4a9eff);
+  outline-offset: -4px;
+}
+
+/* -------------------------------------------------------------- loader controls */
+
+.bonfire-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.bonfire-loader-toolbar {
+  flex: 0 0 auto;
+  margin-top: 8px;
+}
+
+.bonfire-navigation {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.bonfire-nav-step {
+  width: 24px;
+  padding-inline: 0 !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+.bonfire-control-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.bonfire-info-row {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  align-items: start;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.bonfire-align-row {
+  width: 100%;
+}
+
+.bonfire-control-label {
+  flex: 0 0 auto;
+  width: 54px;
+  color: var(--descrip-text, #aaa);
+  white-space: nowrap;
+}
+
+.bonfire-select-shell {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+.bonfire-select-shell::after {
+  content: "⌄";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-58%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.bonfire-select {
+  width: max-content;
+  max-width: 100%;
+  height: 27px;
+  box-sizing: border-box;
+  padding: 3px 24px 3px 8px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  outline: none;
+  appearance: none;
+  background: var(--comfy-input-bg, #2a2a2a);
+  color: var(--input-text, #ddd);
+  font: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  cursor: pointer;
+  color-scheme: dark;
+}
+
+.bonfire-select:hover,
+.bonfire-select:focus {
+  border-color: #4a9eff;
+}
+
+.bonfire-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.bonfire-fields .bonfire-number-row {
+  width: max-content;
+  max-width: 100%;
+}
+
+.bonfire-number-editor {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  height: 27px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: var(--comfy-input-bg, #2a2a2a);
+  overflow: hidden;
+}
+
+.bonfire-number-input {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 2px 5px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--input-text, #ddd);
+  font: inherit;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bonfire-number-suffix {
+  flex: 0 0 auto;
+  padding-right: 5px;
+  opacity: 0.7;
+}
+
+.bonfire-number-step {
+  flex: 0 0 25px;
+  width: 25px;
+  height: 100%;
+  padding: 0 !important;
+  border-width: 0 1px 0 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.bonfire-number-step:last-child {
+  border-width: 0 0 0 1px !important;
+}
+
+.bonfire-vertical-steps {
+  display: flex;
+  flex: 0 0 18px;
+  flex-direction: column;
+  align-self: stretch;
+  border-left: 1px solid var(--border-color, #444);
+}
+
+.bonfire-vertical-steps .bonfire-number-step {
+  flex: 1 1 50%;
+  width: 18px;
+  min-height: 0;
+  border: none !important;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.bonfire-vertical-steps .bonfire-number-step:first-child {
+  border-bottom: 1px solid var(--border-color, #444) !important;
+}
+
+.bonfire-position {
+  min-width: 32px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.bonfire-row-action {
+  white-space: nowrap;
+}
+
+.bonfire-heart {
+  width: 28px;
+  padding-inline: 0 !important;
+  color: #d8b6bd !important;
+  font-size: 15px !important;
+}
+
+.bonfire-heart.is-active {
+  color: #ff6f91 !important;
+  border-color: rgba(255, 111, 145, 0.65) !important;
+  background: rgba(255, 111, 145, 0.12) !important;
+}
+
+.bonfire-step,
+.bonfire-action,
+.bonfire-close,
+.bonfire-add {
+  padding: 3px 8px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: var(--comfy-input-bg, #2a2a2a);
+  color: var(--input-text, #ddd);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.bonfire-step:hover:not(:disabled),
+.bonfire-action:hover:not(:disabled),
+.bonfire-close:hover,
+.bonfire-add:hover:not(:disabled) {
+  border-color: var(--border-color, #4a9eff);
+  filter: brightness(1.2);
+}
+
+.bonfire-step:active:not(:disabled),
+.bonfire-action:active:not(:disabled),
+.bonfire-close:active,
+.bonfire-add:active:not(:disabled),
+.bonfire-ratio:active,
+.bonfire-favourite:active:not(:disabled),
+.bonfire-tile-delete:active:not(:disabled) {
+  transform: translateY(1px);
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.24) !important;
+}
+
+.bonfire-step:disabled,
+.bonfire-action:disabled,
+.bonfire-add:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------- readouts */
+
+.bonfire-readout {
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.bonfire-info-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.bonfire-info-source,
+.bonfire-info-target {
+  min-width: 0;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.bonfire-adjustment {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  color: var(--input-text, #ddd);
+}
+
+.bonfire-adjustment-arrow {
+  color: #7cb7ff;
+}
+
+.bonfire-warning {
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(190, 140, 40, 0.18);
+  color: #e6c07b;
+  white-space: normal;
+}
+
+/* A blocking problem stops the run; a plain warning only advises. */
+.bonfire-warning.is-blocking {
+  background: rgba(190, 60, 60, 0.2);
+  color: #e88;
+}
+
+/* ---------------------------------------------------------------- shot ratios */
+
+.bonfire-ratios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+  gap: 3px;
+  min-width: 0;
+  overflow: visible;
+}
+
+.bonfire-ratio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  width: 100%;
+  /* Tall enough for the tallest glyph, so every button lines up on its label. */
+  min-height: 46px;
+  padding: 3px 2px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: var(--comfy-input-bg, #2a2a2a);
+  color: var(--input-text, #ddd);
+  cursor: pointer;
+  font-size: 9px;
+}
+
+.bonfire-ratio-glyph {
+  display: block;
+  /* flex-shrink defaults to 1, which squashed every glyph to the same flat bar and
+     lost the one thing these buttons exist to show. */
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+  opacity: 0.75;
+}
+
+.bonfire-ratio.is-active {
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.18);
+  color: #fff;
+}
+
+.bonfire-mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bonfire-frame-count {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+@container (max-width: 330px) {
+  .bonfire-loader-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .bonfire-navigation {
+    margin-left: 0;
+  }
+}
+
+/* ------------------------------------------------------------------- browser */
+
+.bonfire-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.bonfire-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, 92vw);
+  height: min(760px, 88vh);
+  border: 1px solid var(--border-color, #444);
+  border-radius: 8px;
+  background: var(--comfy-menu-bg, #202020);
+  color: var(--input-text, #ddd);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.bonfire-toolbar,
+.bonfire-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-color, #333);
+}
+
+.bonfire-footer {
+  border-bottom: none;
+  border-top: 1px solid var(--border-color, #333);
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.bonfire-footer-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.bonfire-delete,
+.bonfire-tile-delete {
+  color: #ef9a9a !important;
+}
+
+.bonfire-search {
+  flex: 1 1 auto;
+  padding: 4px 8px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: var(--comfy-input-bg, #2a2a2a);
+  color: var(--input-text, #ddd);
+}
+
+.bonfire-sort {
+  padding: 4px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: var(--comfy-input-bg, #2a2a2a);
+  color: var(--input-text, #ddd);
+}
+
+.bonfire-sort-dir {
+  width: 28px;
+  padding-inline: 0 !important;
+  flex: 0 0 auto;
+}
+
+.bonfire-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.bonfire-count,
+.bonfire-hint {
+  font-size: 11px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.bonfire-grid {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 10px;
+  overflow-y: auto;
+  outline: none;
+  align-content: start;
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+
+.bonfire-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.bonfire-tile.is-focused {
+  border-color: var(--border-color, #666);
+}
+
+.bonfire-tile.is-selected {
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.14);
+}
+
+.bonfire-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  /* Same checkerboard as the stage: thumbnails keep their alpha. */
+  background-color: #1a1a1a;
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.06) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.06) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.06) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+}
+
+.bonfire-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.bonfire-thumb-status {
+  position: absolute;
+  inset: auto 6px 6px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #ddd;
+  font-size: 9px;
+  text-align: center;
+}
+
+.bonfire-duplicate-badge {
+  position: absolute;
+  z-index: 1;
+  left: 8px;
+  bottom: 8px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(74, 158, 255, 0.88);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.bonfire-tile.is-duplicate {
+  box-shadow: inset 0 0 0 1px rgba(74, 158, 255, 0.55);
+}
+
+.bonfire-thumb.is-error img {
+  display: none;
+}
+
+.bonfire-tile-delete {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  cursor: pointer;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.bonfire-tile-delete:hover {
+  border-color: rgba(239, 83, 80, 0.9);
+  background: rgba(55, 10, 10, 0.9);
+}
+
+.bonfire-favourite {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  color: #f3dbe0;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.bonfire-favourite:hover,
+.bonfire-favourite.is-active {
+  border-color: rgba(255, 111, 145, 0.85);
+  color: #ff6f91;
+  background: rgba(40, 12, 20, 0.86);
+}
+
+.bonfire-favourite:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.bonfire-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bonfire-name,
+.bonfire-meta {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+}
+
+.bonfire-meta {
+  opacity: 0.6;
+}
+
+.bonfire-empty {
+  grid-column: 1 / -1;
+  padding: 24px;
+  text-align: center;
+  opacity: 0.7;
+}

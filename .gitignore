@@ -1,0 +1,29 @@
+# Machine-specific agent context: present on disk, never tracked.
+AGENTS-LOCAL.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.venv/
+venv/
+
+# Test runner temporaries (repository-local basetemp)
+.pytest-tmp/
+
+# Tooling / editor
+.claude/
+.vscode/
+.idea/
+node_modules/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Registry pack output
+node.zip

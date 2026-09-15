@@ -1,0 +1,13 @@
+# Excluded from the published registry archive.
+tests/
+.github/
+AGENTS.md
+AGENTS-LOCAL.md
+CLAUDE.md
+GROK.md
+docs/
+package.json
+package-lock.json
+node_modules/
+.pytest-tmp/
+__pycache__/

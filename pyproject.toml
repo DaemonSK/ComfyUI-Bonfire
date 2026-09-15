@@ -1,0 +1,18 @@
+[project]
+name = "bonfire"
+version = "1.0.0"
+description = "Two ComfyUI nodes: a picture loader you put in order yourself, and a shot node for size and clip length."
+license = { file = "LICENSE" }
+requires-python = ">=3.10,<3.15"
+classifiers = [
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/DaemonSK/ComfyUI-Bonfire"
+
+[tool.comfy]
+PublisherId = "bonfire"
+DisplayName = "Bonfire"
+Icon = "https://raw.githubusercontent.com/DaemonSK/ComfyUI-Bonfire/master/assets/icon.png"
