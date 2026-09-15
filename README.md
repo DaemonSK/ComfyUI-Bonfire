@@ -22,14 +22,6 @@ This one remembers the order you put them in.
 - Drop pictures **or a folder** on the node.
 - **Paste** takes what is on the clipboard.
 
-### Clipboard permission note
-
-The **Paste** button needs clipboard permission from the browser:
-
-- **Chrome / Chromium:** allow clipboard access for the ComfyUI page when prompted.
-- **Firefox:** use the two-step permission flow — click **Paste**, allow clipboard
-  access, then click **Paste** again.
-
 Same picture twice? It will not add it again. It just jumps to the one you already have.
 
 Then walk through them with the arrows, or the left/right keys while the node is selected.
