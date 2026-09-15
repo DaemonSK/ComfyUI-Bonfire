@@ -17,8 +17,15 @@
   padding: 2px;
   font-size: 11px;
   color: var(--descrip-text, #b7b7b7);
-  overflow: hidden;
   container-type: inline-size;
+}
+
+.bonfire-loader {
+  overflow: hidden;
+}
+
+.bonfire-shot {
+  overflow: visible;
 }
 
 /* Some theme rules assign display directly to rows. Hidden must always win or an old
@@ -402,9 +409,12 @@
   justify-content: flex-end;
   gap: 3px;
   width: 100%;
+  min-width: 42px;
   /* Tall enough for the tallest glyph, so every button lines up on its label. */
   min-height: 46px;
   padding: 3px 2px;
+  overflow: hidden;
+  position: relative;
   border: 1px solid var(--border-color, #444);
   border-radius: 4px;
   background: var(--comfy-input-bg, #2a2a2a);

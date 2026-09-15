@@ -514,6 +514,73 @@ export class Disposables {
   }
 }
 
+/**
+ * DOM widgets sit on top of the LiteGraph canvas, so a wheel over them never
+ * reaches the zoom handler. Forward it unless the event already came from the canvas.
+ */
+export function installCanvasWheelForward(element, bag) {
+  if (!element || !bag) return;
+  bag.listen(
+    element,
+    "wheel",
+    (event) => {
+      const canvas = globalThis.app?.canvas?.canvas;
+      if (!canvas || event.target === canvas) return;
+      event.preventDefault();
+      event.stopPropagation();
+      canvas.dispatchEvent(
+        new WheelEvent("wheel", {
+          bubbles: true,
+          cancelable: true,
+          composed: true,
+          clientX: event.clientX,
+          clientY: event.clientY,
+          deltaX: event.deltaX,
+          deltaY: event.deltaY,
+          deltaZ: event.deltaZ,
+          deltaMode: event.deltaMode,
+          ctrlKey: event.ctrlKey,
+          metaKey: event.metaKey,
+          shiftKey: event.shiftKey,
+          altKey: event.altKey,
+        })
+      );
+    },
+    { passive: false, capture: true }
+  );
+}
+
+/**
+ * Run `onChange` after layout and whenever `element` is resized.
+ *
+ * The Shot aspect grid wraps by width. A refresh can paint one frame with the
+ * old overlay box, so the wrap-edge card (9:16) sits in a clipped gap until
+ * something else forces a redraw.
+ */
+export function watchPanelLayout(element, onChange, bag) {
+  if (!element || typeof onChange !== "function" || !bag) return;
+  const schedule = globalThis.requestAnimationFrame?.bind(globalThis) ?? ((fn) => setTimeout(fn, 0));
+  const cancel = globalThis.cancelAnimationFrame?.bind(globalThis) ?? clearTimeout;
+  let pending = 0;
+  const notify = () => {
+    if (pending) return;
+    pending = schedule(() => {
+      pending = 0;
+      onChange();
+    });
+  };
+  if (typeof ResizeObserver === "function") {
+    const observer = new ResizeObserver(notify);
+    observer.observe(element);
+    bag.add(() => observer.disconnect());
+  }
+  const startup = schedule(notify);
+  bag.add(() => {
+    cancel(startup);
+    if (pending) cancel(pending);
+  });
+}
+
 /** Attach a cleanup bag to a node, disposed when the node is removed. */
 export function attachDisposables(node) {
   const bag = new Disposables();

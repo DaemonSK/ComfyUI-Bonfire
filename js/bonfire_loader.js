@@ -25,6 +25,7 @@ import {
 } from "./bonfire_sources.js";
 import {
   attachDisposables,
+  installCanvasWheelForward,
   createNumberControl,
   createRevisionGate,
   createSelectControl,
@@ -351,6 +352,7 @@ export async function setupImageLoader(node) {
     margin: 6,
   });
   bag.add(() => root.remove());
+  installCanvasWheelForward(root, bag);
   if (savedSize[0] >= 40 && savedSize[1] >= 40) {
     node.size = savedSize;
     node.setSize?.(savedSize);

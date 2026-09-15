@@ -15,10 +15,12 @@ import {
 import { shotFieldVisibility } from "./bonfire_visibility.js";
 import {
   attachDisposables,
+  installCanvasWheelForward,
   createNumberControl,
   createRevisionGate,
   createSelectControl,
   debounce,
+  watchPanelLayout,
   ensureNodeSize,
   findWidget,
   installSizeFloor,
@@ -154,10 +156,15 @@ export async function setupShot(node) {
     button.type = "button";
     button.title = `${ratio.label} (${ratio.value.toFixed(2)}:1)`;
     button.append(ratioGlyph(ratio), element("span", "bonfire-ratio-label", ratio.label));
-    bag.listen(button, "click", () => {
+    const selectRatio = () => {
       ratioWidget.value = ratio.key;
       node.setDirtyCanvas(true, true);
+    };
+    bag.listen(button, "pointerdown", (event) => {
+      if (event.button !== 0) return;
+      selectRatio();
     });
+    bag.listen(button, "click", selectRatio);
     ratioRow.appendChild(button);
     ratioButtons.set(ratio.key, button);
   }
@@ -244,6 +251,7 @@ export async function setupShot(node) {
     margin: 6,
   });
   bag.add(() => root.remove());
+  installCanvasWheelForward(root, bag);
   if (savedSize[0] >= 40 && savedSize[1] >= 40) {
     node.size = savedSize;
     node.setSize?.(savedSize);
@@ -251,6 +259,14 @@ export async function setupShot(node) {
   sizingReady = true;
   installSizeFloor(node, measureMin, bag);
   applySizeFloor();
+  watchPanelLayout(
+    ratioRow,
+    () => {
+      applySizeFloor();
+      node.setDirtyCanvas(true, true);
+    },
+    bag
+  );
   bag.listen(root, "contextmenu", (event) => {
     openNodeContextMenu({ event, node, canvas: app.canvas });
   });

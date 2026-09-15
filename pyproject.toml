@@ -1,6 +1,6 @@
 [project]
 name = "bonfire"
-version = "1.0.0"
+version = "1.0.1"
 description = "Two ComfyUI nodes: a picture loader you put in order yourself, and a shot node for size and clip length."
 license = { file = "LICENSE" }
 requires-python = ">=3.10,<3.15"
